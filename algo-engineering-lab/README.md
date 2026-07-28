@@ -3,7 +3,7 @@
 > **定位：** 验证 Python 算法原型 → golden 数据集 → C 库 / Swift → iOS 侧 parity 回归的数值一致性与性能链路。  
 > **对外口径：** 面试前针对目标公司技术栈的**验证性原型**，不是生产项目。
 
-版本：0.2.0 · 日期：2026-07-28 · 作者：lab · 状态：生效
+版本：0.3.0 · 日期：2026-07-28 · 作者：lab · 状态：生效
 
 ---
 
@@ -50,6 +50,11 @@ uv run python -m python.generate_golden fir_ppg
 uv run python -m python.generate_golden hrv_freq_domain
 uv run python -m python.generate_golden coreml_quant
 uv run python -m python.generate_golden streaming_fir
+uv run python -m python.generate_golden hrv_artifact_correction
+uv run python -m python.generate_golden ota_dfu_state_machine
+uv run python -m python.generate_golden multi_channel_sync
+uv run python -m python.generate_golden coreml_drift_monitoring
+uv run python -m python.generate_golden sleep_staging_postprocess
 swift test --filter ParityTests
 ```
 
@@ -70,6 +75,12 @@ swift test --filter ParityTests
 | 04 CoreML | 置信度偏移均值 | abs ≤0.05 | ~1e-5 | 通过 |
 | 05 流式 FIR | 连续窗 vs 因果整段 | abs ≤1e-12 | 全绿 | 通过 |
 | 05 流式 FIR | 丢包 zero_fill | abs ≤1e-12 | 全绿 | 通过 |
+| 06 HRV 伪差校正 | corrected+mask | 逐点对齐 | 全绿 | 通过 |
+| 07 OTA 状态机 | 终态/漏斗/进度 | 逐字段对齐 | 全绿 | 通过 |
+| 08 多通道同步 | timeline/aligned/mask | 全量对齐 | 全绿 | 通过 |
+| 09 CoreML 漂移监控 | stable/shifted 告警语义 | 规则断言 | 全绿 | 通过 |
+| 10 睡眠后处理 | raw/smoothed/metrics | 全量对齐 | 全绿 | 通过 |
+| 11 Swift CoreML 集成 | 固定输入→概率输出 | 与 Python 向量对齐 | 全绿 | 通过 |
 
 ### 性能数字表
 
@@ -100,9 +111,12 @@ swift test --filter ParityTests
 
 建议优先级：
 
-1. HRV 伪差校正（Artifact Correction）
-2. OTA/DFU 断点续传仿真（状态机 + 漏斗指标）
-3. 多通道同步与时间戳漂移校正
+1. HRV 伪差校正（Artifact Correction）✅
+2. OTA/DFU 断点续传仿真（状态机 + 漏斗指标）✅
+3. 多通道同步与时间戳漂移校正✅
+4. CoreML 在线漂移监控✅
+5. 睡眠分期后处理✅
+6. 端上性能与能耗画像✅
 
 扩展 case 仍遵循同一交付链路：
 
@@ -119,6 +133,12 @@ swift test --filter ParityTests
 | 03 HRV 频域 | [`hrv-freq-domain.md`](docs/02-算法对齐口径/hrv-freq-domain.md) | [`case-03`](docs/06-实验复盘/case-03-hrv-freq-domain.md) | 完成 |
 | 04 CoreML 量化 | [`coreml-quant.md`](docs/02-算法对齐口径/coreml-quant.md) | [`case-04`](docs/06-实验复盘/case-04-coreml-quant.md) | 完成 |
 | 05 流式滑窗 | [`streaming-fir.md`](docs/02-算法对齐口径/streaming-fir.md) | [`case-05`](docs/06-实验复盘/case-05-streaming-fir.md) | 完成 |
+| 06 HRV 伪差校正 | [`hrv-artifact-correction.md`](docs/02-算法对齐口径/hrv-artifact-correction.md) | [`case-06`](docs/06-实验复盘/case-06-hrv-artifact-correction.md) | 完成 |
+| 07 OTA/DFU 状态机仿真 | [`ota-dfu-state-machine.md`](docs/02-算法对齐口径/ota-dfu-state-machine.md) | [`case-07`](docs/06-实验复盘/case-07-ota-dfu-simulation.md) | 完成 |
+| 08 多通道同步 | [`multi-channel-sync.md`](docs/02-算法对齐口径/multi-channel-sync.md) | [`case-08`](docs/06-实验复盘/case-08-multi-channel-sync.md) | 完成 |
+| 09 CoreML 漂移监控 | [`coreml-drift-monitoring.md`](docs/02-算法对齐口径/coreml-drift-monitoring.md) | [`case-09`](docs/06-实验复盘/case-09-coreml-drift-monitoring.md) | 完成 |
+| 10 睡眠分期后处理 | [`sleep-staging-postprocess.md`](docs/02-算法对齐口径/sleep-staging-postprocess.md) | [`case-10`](docs/06-实验复盘/case-10-sleep-staging-postprocess.md) | 完成 |
+| 11 统一性能与能耗画像 | [`05-性能基准规范.md`](docs/05-性能基准规范.md) | [`case-11`](docs/06-实验复盘/case-11-perf-and-power.md) | 完成 |
 
 实施任务清单：[`tickets.md`](./tickets.md)  
 文档要求说明书：[`../Talk with K3/algo-engineering-lab技术文档要求说明书.md`](../Talk%20with%20K3/algo-engineering-lab技术文档要求说明书.md)
