@@ -15,7 +15,7 @@ hrv = [
 ]
 ml = [
     "coremltools>=8.0",
-    "scikit-learn>=1.5.0",
+    "scikit-learn>=1.5.0,<1.6",
 ]
 
 [build-system]

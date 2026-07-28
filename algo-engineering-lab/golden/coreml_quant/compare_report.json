@@ -1,0 +1,96 @@
+{
+  "case": "coreml_quant",
+  "class_names": [
+    "rest",
+    "walk",
+    "run"
+  ],
+  "confidence_hist": {
+    "bins": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "fp16": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+      4,
+      2,
+      11,
+      177
+    ],
+    "fp32": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+      4,
+      2,
+      11,
+      177
+    ]
+  },
+  "disclaimer": "验证性原型，非生产健康/睡眠模型",
+  "metrics": {
+    "confidence_shift_mean": 2.748936414718628e-05,
+    "confidence_shift_std": 0.0003953423561053642,
+    "fp16_val_accuracy": 0.945,
+    "fp32_val_accuracy": 0.945,
+    "sklearn_vs_fp32_top1": 1.0,
+    "top1_agreement_fp16_vs_fp32": 1.0
+  },
+  "models": {
+    "coremltools": "9.0",
+    "fp16": "artifacts/coreml/activity_fp16.mlpackage",
+    "fp32": "artifacts/coreml/activity_fp32.mlpackage"
+  },
+  "n_val": 200,
+  "pass": {
+    "conf_shift": true,
+    "top1": true
+  },
+  "preprocess": {
+    "kind": "StandardScaler",
+    "mean": [
+      1.308913083925176,
+      1.0414242886177105,
+      0.8320401038718128,
+      0.5967029288554488,
+      0.3355261971425238,
+      0.25028783693369394,
+      0.15877162361512284,
+      0.13337409809067088
+    ],
+    "note": "App 侧禁止再 normalize；喂入已是 scaled 特征",
+    "scale": [
+      1.1290117391782895,
+      0.9382281787072673,
+      0.7044972984208197,
+      0.633082588293741,
+      0.5632815878514126,
+      0.537521085449657,
+      0.4624270123944335,
+      0.4597473345421613
+    ],
+    "single_source": "train_pipeline_only"
+  },
+  "seed": 42,
+  "thresholds": {
+    "confidence_shift_mean_abs_max": 0.05,
+    "top1_agreement_min": 0.95
+  }
+}

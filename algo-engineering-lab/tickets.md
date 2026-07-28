@@ -62,8 +62,8 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 
 **Blocked by:** T0 · 仓库骨架 + uv 环境 + 三份核心规范初稿；T2 · Case1 HRV 时域：端到端 parity 全绿
 
-- [ ] 量化对比报告可复现
-- [ ] 文档口径为验证性原型，非生产项目
+- [x] 量化对比报告可复现
+- [x] 文档口径为验证性原型，非生产项目
 
 ## T6 · Case5 流式滑窗：RingBuffer + FIR overlap + 丢包注入
 

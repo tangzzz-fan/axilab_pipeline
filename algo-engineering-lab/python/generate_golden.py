@@ -39,6 +39,12 @@ def cmd_hrv_freq_domain(_: argparse.Namespace) -> int:
     return gen_main()
 
 
+def cmd_coreml_quant(_: argparse.Namespace) -> int:
+    from .generate_coreml_quant import main as gen_main
+
+    return gen_main()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="generate_golden")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -46,6 +52,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("hrv_time_domain", help="Generate Case1 HRV time-domain golden set")
     sub.add_parser("fir_ppg", help="Generate Case2 FIR PPG golden + C coeffs header")
     sub.add_parser("hrv_freq_domain", help="Generate Case3 HRV frequency-domain golden + snapshots")
+    sub.add_parser("coreml_quant", help="Generate Case4 CoreML FP32/FP16 compare report")
     args = parser.parse_args(argv)
     if args.cmd == "doctor":
         return cmd_doctor(args)
@@ -55,6 +62,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_fir_ppg(args)
     if args.cmd == "hrv_freq_domain":
         return cmd_hrv_freq_domain(args)
+    if args.cmd == "coreml_quant":
+        return cmd_coreml_quant(args)
     return 1
 
 
