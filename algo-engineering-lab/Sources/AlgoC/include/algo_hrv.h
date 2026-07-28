@@ -28,6 +28,8 @@ int algo_hrv_time_domain(
     double *out_mean_rr_ms
 );
 
+/* 频域 API 见 algo_hrv_freq.h（保持时域头文件职责单一） */
+
 #ifdef __cplusplus
 }
 #endif

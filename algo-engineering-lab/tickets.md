@@ -53,8 +53,8 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 
 **Blocked by:** T2 · Case1 HRV 时域：端到端 parity 全绿
 
-- [ ] `docs/02-算法对齐口径/hrv-freq-domain.md` 环节表完整
-- [ ] 逐快照比对通过
+- [x] `docs/02-算法对齐口径/hrv-freq-domain.md` 环节表完整
+- [x] 逐快照比对通过
 
 ## T5 · Case4 CoreML 量化漂移（FP32 vs FP16）
 

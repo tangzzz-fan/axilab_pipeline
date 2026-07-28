@@ -87,3 +87,82 @@ public enum HRVTimeDomain {
         )
     }
 }
+
+/// HRV 频域结果 + 中间快照（用于逐环定位漂移）。
+public struct HRVFreqDomainResult: Equatable {
+    public var lf: Double
+    public var hf: Double
+    public var lfHfRatio: Double
+    public var resampled: [Double]
+    public var detrended: [Double]
+    public var windowed: [Double]
+    public var psd: [Double]
+    public var freqs: [Double]
+}
+
+public enum HRVFreqDomain {
+    /**
+     RR(ms) → 4Hz 插值 → 减均值 → Hann → rFFT → LF/HF。
+
+     口径：`docs/02-算法对齐口径/hrv-freq-domain.md`。
+     快照与 golden `snapshots` 字段一一对应。
+     */
+    public static func compute(rrMs: [Double]) throws -> HRVFreqDomainResult {
+        if rrMs.isEmpty {
+            throw AlgoError.empty
+        }
+
+        var lf = 0.0
+        var hf = 0.0
+        var ratio = 0.0
+        var resampled = [Double](repeating: 0, count: Int(ALGO_HRV_FREQ_MAX_TIME))
+        var detrended = [Double](repeating: 0, count: Int(ALGO_HRV_FREQ_MAX_TIME))
+        var windowed = [Double](repeating: 0, count: Int(ALGO_HRV_FREQ_MAX_TIME))
+        var psd = [Double](repeating: 0, count: Int(ALGO_HRV_FREQ_MAX_PSD))
+        var freqs = [Double](repeating: 0, count: Int(ALGO_HRV_FREQ_MAX_PSD))
+        var nTime = resampled.count
+        var nPsd = psd.count
+
+        let code: Int32 = rrMs.withUnsafeBufferPointer { buf in
+            guard let base = buf.baseAddress else {
+                return Int32(ALGO_ERR_NULL_POINTER)
+            }
+            return resampled.withUnsafeMutableBufferPointer { rBuf in
+                detrended.withUnsafeMutableBufferPointer { dBuf in
+                    windowed.withUnsafeMutableBufferPointer { wBuf in
+                        psd.withUnsafeMutableBufferPointer { pBuf in
+                            freqs.withUnsafeMutableBufferPointer { fBuf in
+                                algo_hrv_freq_domain(
+                                    base,
+                                    buf.count,
+                                    &lf,
+                                    &hf,
+                                    &ratio,
+                                    rBuf.baseAddress,
+                                    dBuf.baseAddress,
+                                    wBuf.baseAddress,
+                                    pBuf.baseAddress,
+                                    fBuf.baseAddress,
+                                    &nTime,
+                                    &nPsd
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        guard code == ALGO_OK else { throw AlgoError(algoCode: code) }
+        return HRVFreqDomainResult(
+            lf: lf,
+            hf: hf,
+            lfHfRatio: ratio,
+            resampled: Array(resampled.prefix(nTime)),
+            detrended: Array(detrended.prefix(nTime)),
+            windowed: Array(windowed.prefix(nTime)),
+            psd: Array(psd.prefix(nPsd)),
+            freqs: Array(freqs.prefix(nPsd))
+        )
+    }
+}
