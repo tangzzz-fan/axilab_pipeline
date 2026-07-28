@@ -82,3 +82,76 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 
 - [x] 陌生人按 README 15 分钟内跑通已完成 case 的 parity
 - [x] 三张卡片各 ≤5 条 bullet，可被追问一层
+
+---
+
+## Phase 2 · 候选扩展 Case（T8+）
+
+来源：`docs/08-扩展案例建议.md`。  
+原则不变：Python 原型 → golden → C/Swift → parity/benchmark → 复盘。
+
+## T8 · Case A：HRV 伪差校正（Artifact Correction）
+
+**Principle（原理）：** RR 序列中异位搏动/漏搏会导致 HRV 指标偏移；通过异常点检测 + 插值回填提高指标鲁棒性。  
+**What to build:** 在 Case1 前增加 correction 链路；对比校正前后指标与误差稳定性。  
+**Blocked by:** T2 · Case1 HRV 时域：端到端 parity 全绿
+
+- [ ] 对齐口径文档：`docs/02-算法对齐口径/hrv-artifact-correction.md`
+- [ ] Python golden 覆盖 ectopic/missing/连续异常段，病态占比 ≥40%
+- [ ] C/Swift 与 Python correction 后结果 parity 全绿
+- [ ] 复盘文档：`docs/06-实验复盘/case-06-hrv-artifact-correction.md`
+
+## T9 · Case C：OTA/DFU 断点续传状态机仿真（协议侧）
+
+**Principle（原理）：** OTA 的核心是可恢复状态机，不是文件传输；必须保证中断后可续传或安全失败。  
+**What to build:** 模拟 chunk/ack/resume token；注入断连、重启、CRC 错误，输出漏斗指标。  
+**Blocked by:** T1 · C 库集成规范 + SPM/C 目标可编译空壳
+
+- [ ] 状态机文档：`docs/02-算法对齐口径/ota-dfu-state-machine.md`
+- [ ] 仿真脚本 + golden：中断场景可复现
+- [ ] Swift 侧状态机回放与 golden 对齐
+- [ ] 复盘文档：`docs/06-实验复盘/case-07-ota-dfu-simulation.md`
+
+## T10 · Case B：多通道同步与时间戳漂移校正
+
+**Principle（原理）：** 多通道信号在 BLE 分片下会产生时间错位；需统一时间轴与漂移校正。  
+**What to build:** 通道序列号 + 时间戳重建；比较校正前后对齐误差。  
+**Blocked by:** T6 · Case5 流式滑窗：RingBuffer + FIR overlap + 丢包注入
+
+- [ ] 对齐口径文档：`docs/02-算法对齐口径/multi-channel-sync.md`
+- [ ] Golden 含时钟漂移 + 丢包/乱序注入
+- [ ] Swift 重建输出与 Python 真值对齐
+- [ ] 复盘文档：`docs/06-实验复盘/case-08-multi-channel-sync.md`
+
+## T11 · Case E：CoreML 在线漂移监控（Monitoring）
+
+**Principle（原理）：** 线上输入分布变化会导致模型性能退化；需用统计指标持续监控。  
+**What to build:** 输入分布统计 + PSI/KL 漂移指标 + 告警阈值策略。  
+**Blocked by:** T5 · Case4 CoreML 量化漂移（FP32 vs FP16）
+
+- [ ] 对齐口径文档：`docs/02-算法对齐口径/coreml-drift-monitoring.md`
+- [ ] 报告脚本：正常/漂移场景阈值可区分
+- [ ] Parity 测试断言告警触发逻辑
+- [ ] 复盘文档：`docs/06-实验复盘/case-09-coreml-drift-monitoring.md`
+
+## T12 · Case D：睡眠分期后处理（Post-processing）
+
+**Principle（原理）：** 单 epoch 分类噪声大；利用 HMM/规则约束平滑转移，提升可解释性。  
+**What to build:** 输入分类概率序列，输出平滑 hypnogram 与稳定统计指标。  
+**Blocked by:** T5 · Case4 CoreML 量化漂移（FP32 vs FP16）
+
+- [ ] 对齐口径文档：`docs/02-算法对齐口径/sleep-staging-postprocess.md`
+- [ ] Golden 含抖动场景 + 约束后期望输出
+- [ ] Swift 后处理链路 parity 全绿
+- [ ] 复盘文档：`docs/06-实验复盘/case-10-sleep-staging-postprocess.md`
+
+## T13 · Case F：端上性能与能耗画像（Perf + Power）
+
+**Principle（原理）：** 算法可用不等于可上线；需量化延迟、吞吐、内存和功耗趋势。  
+**What to build:** C naive / Accelerate / CoreML 多实现统一基准；退化门槛检测。  
+**Blocked by:** T3 · Case2 FIR 滤波：C 卷积 vs vDSP + 系数精度；T5 · Case4 CoreML 量化漂移（FP32 vs FP16）
+
+- [ ] 基准规范补充：`docs/05-性能基准规范.md` 增加能耗记录模板
+- [ ] BenchmarkTests 增加统一对比入口
+- [ ] `docs/bench-log.md` 追加可复现数字（含环境五元信息）
+- [ ] 复盘文档：`docs/06-实验复盘/case-11-perf-and-power.md`

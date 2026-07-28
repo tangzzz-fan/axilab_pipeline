@@ -94,6 +94,22 @@ swift test --filter ParityTests
 
 ---
 
+## 扩展路线图（新增 case 候选）
+
+详见：[`docs/08-扩展案例建议.md`](docs/08-扩展案例建议.md)
+
+建议优先级：
+
+1. HRV 伪差校正（Artifact Correction）
+2. OTA/DFU 断点续传仿真（状态机 + 漏斗指标）
+3. 多通道同步与时间戳漂移校正
+
+扩展 case 仍遵循同一交付链路：
+
+`Python 原型 → golden → C/Swift 实现 → Parity/Benchmark → 复盘`
+
+---
+
 ## Case 导航
 
 | Case | 对齐口径 | 复盘 | 状态 |
