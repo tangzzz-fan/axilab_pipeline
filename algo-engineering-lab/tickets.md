@@ -96,10 +96,10 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 **What to build:** 在 Case1 前增加 correction 链路；对比校正前后指标与误差稳定性。  
 **Blocked by:** T2 · Case1 HRV 时域：端到端 parity 全绿
 
-- [ ] 对齐口径文档：`docs/02-算法对齐口径/hrv-artifact-correction.md`
-- [ ] Python golden 覆盖 ectopic/missing/连续异常段，病态占比 ≥40%
-- [ ] C/Swift 与 Python correction 后结果 parity 全绿
-- [ ] 复盘文档：`docs/06-实验复盘/case-06-hrv-artifact-correction.md`
+- [x] 对齐口径文档：`docs/02-算法对齐口径/hrv-artifact-correction.md`
+- [x] Python golden 覆盖 ectopic/missing/连续异常段，病态占比 ≥40%
+- [x] C/Swift 与 Python correction 后结果 parity 全绿
+- [x] 复盘文档：`docs/06-实验复盘/case-06-hrv-artifact-correction.md`
 
 ## T9 · Case C：OTA/DFU 断点续传状态机仿真（协议侧）
 

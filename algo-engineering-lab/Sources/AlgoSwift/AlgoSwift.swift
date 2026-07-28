@@ -88,6 +88,57 @@ public enum HRVTimeDomain {
     }
 }
 
+/// HRV 伪差校正结果：校正后序列 + 掩码 + 校正后时域指标。
+public struct HRVArtifactCorrectionResult: Equatable {
+    public var rrCorrected: [Double]
+    public var artifactMask: [UInt8]
+    public var metrics: HRVTimeDomainResult
+}
+
+public enum HRVArtifactCorrection {
+    /**
+     伪差检测 + 插值回填；默认阈值 120ms（口径见 case-06 文档）。
+     */
+    public static func correct(
+        rrMs: [Double],
+        thresholdMs: Double = 120.0
+    ) throws -> HRVArtifactCorrectionResult {
+        if rrMs.isEmpty {
+            throw AlgoError.empty
+        }
+        if rrMs.count < 2 {
+            throw AlgoError.tooShort
+        }
+        if !thresholdMs.isFinite || thresholdMs <= 0 {
+            throw AlgoError.invalidArgument
+        }
+
+        var corrected = [Double](repeating: 0, count: rrMs.count)
+        var mask = [UInt8](repeating: 0, count: rrMs.count)
+        let code: Int32 = rrMs.withUnsafeBufferPointer { rBuf in
+            corrected.withUnsafeMutableBufferPointer { cBuf in
+                mask.withUnsafeMutableBufferPointer { mBuf in
+                    guard let rPtr = rBuf.baseAddress,
+                          let cPtr = cBuf.baseAddress,
+                          let mPtr = mBuf.baseAddress else {
+                        return Int32(ALGO_ERR_NULL_POINTER)
+                    }
+                    return algo_hrv_correct_artifacts(
+                        rPtr,
+                        rBuf.count,
+                        thresholdMs,
+                        cPtr,
+                        mPtr
+                    )
+                }
+            }
+        }
+        guard code == ALGO_OK else { throw AlgoError(algoCode: code) }
+        let metrics = try HRVTimeDomain.compute(rrMs: corrected)
+        return HRVArtifactCorrectionResult(rrCorrected: corrected, artifactMask: mask, metrics: metrics)
+    }
+}
+
 /// HRV 频域结果 + 中间快照（用于逐环定位漂移）。
 public struct HRVFreqDomainResult: Equatable {
     public var lf: Double
