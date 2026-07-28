@@ -33,9 +33,9 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 
 **Blocked by:** T0 · 仓库骨架 + uv 环境 + 三份核心规范初稿；T1 · C 库集成规范 + SPM/C 目标可编译空壳
 
-- [ ] 对齐口径文档 `docs/02-算法对齐口径/hrv-time-domain.md`
-- [ ] `uv run` 生成 golden，覆盖正常/边界/病态，病态占比 ≥40%
-- [ ] Parity 测试全绿；复盘草稿 `docs/06-实验复盘/case-01-hrv-time-domain.md`
+- [x] 对齐口径文档 `docs/02-算法对齐口径/hrv-time-domain.md`
+- [x] `uv run` 生成 golden，覆盖正常/边界/病态，病态占比 ≥40%
+- [x] Parity 测试全绿；复盘草稿 `docs/06-实验复盘/case-01-hrv-time-domain.md`
 
 ## T3 · Case2 FIR 滤波：C 卷积 vs vDSP + 系数精度
 

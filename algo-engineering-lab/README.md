@@ -46,7 +46,12 @@ Swift 空壳（T1 起）：
 swift build
 ```
 
-生成 golden / 跑 parity：随各 case 落地后补命令（见 `tickets.md` T2+）。
+生成 golden / 跑 Case1 parity：
+
+```bash
+uv run python -m python.generate_golden hrv_time_domain
+swift test --filter ParityTests
+```
 
 ---
 
@@ -56,7 +61,8 @@ swift build
 
 | Case | 指标 | 阈值 | 实测误差 | 结论 |
 | :--- | :--- | :--- | :--- | :--- |
-| — | — | — | — | 待 T2+ |
+| 01 HRV 时域 | SDNN/RMSSD | ≤0.1 ms | ≤阈值（parity 全绿） | 通过 |
+| 01 HRV 时域 | pNN50 | ≤0.5 pp | ≤阈值 | 通过 |
 
 ### 性能数字表
 
@@ -72,7 +78,7 @@ swift build
 
 | Case | 对齐口径 | 复盘 | 状态 |
 | :--- | :--- | :--- | :--- |
-| 01 HRV 时域 | `docs/02-算法对齐口径/` | `docs/06-实验复盘/` | 待 T2 |
+| 01 HRV 时域 | [`hrv-time-domain.md`](docs/02-算法对齐口径/hrv-time-domain.md) | [`case-01`](docs/06-实验复盘/case-01-hrv-time-domain.md) | T2 已完成 |
 | 02 FIR 滤波 | 同上 | 同上 | 待 T3 |
 | 03 HRV 频域 | 同上 | 同上 | 待 T4 |
 | 04 CoreML 量化 | 同上 | 同上 | 待 T5 |
