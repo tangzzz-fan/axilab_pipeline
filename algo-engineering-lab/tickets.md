@@ -80,5 +80,5 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 
 **Blocked by:** T2 · Case1 HRV 时域：端到端 parity 全绿；T3 · Case2 FIR 滤波：C 卷积 vs vDSP + 系数精度；T4 · Case3 HRV 频域：中间快照逐环对齐；T5 · Case4 CoreML 量化漂移（FP32 vs FP16）；T6 · Case5 流式滑窗：RingBuffer + FIR overlap + 丢包注入
 
-- [ ] 陌生人按 README 15 分钟内跑通已完成 case 的 parity
-- [ ] 三张卡片各 ≤5 条 bullet，可被追问一层
+- [x] 陌生人按 README 15 分钟内跑通已完成 case 的 parity
+- [x] 三张卡片各 ≤5 条 bullet，可被追问一层
