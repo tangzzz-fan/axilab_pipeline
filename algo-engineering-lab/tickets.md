@@ -107,10 +107,10 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 **What to build:** 模拟 chunk/ack/resume token；注入断连、重启、CRC 错误，输出漏斗指标。  
 **Blocked by:** T1 · C 库集成规范 + SPM/C 目标可编译空壳
 
-- [ ] 状态机文档：`docs/02-算法对齐口径/ota-dfu-state-machine.md`
-- [ ] 仿真脚本 + golden：中断场景可复现
-- [ ] Swift 侧状态机回放与 golden 对齐
-- [ ] 复盘文档：`docs/06-实验复盘/case-07-ota-dfu-simulation.md`
+- [x] 状态机文档：`docs/02-算法对齐口径/ota-dfu-state-machine.md`
+- [x] 仿真脚本 + golden：中断场景可复现
+- [x] Swift 侧状态机回放与 golden 对齐
+- [x] 复盘文档：`docs/06-实验复盘/case-07-ota-dfu-simulation.md`
 
 ## T10 · Case B：多通道同步与时间戳漂移校正
 
