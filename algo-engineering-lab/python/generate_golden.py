@@ -63,6 +63,12 @@ def cmd_ota_dfu_state_machine(_: argparse.Namespace) -> int:
     return gen_main()
 
 
+def cmd_multi_channel_sync(_: argparse.Namespace) -> int:
+    from .generate_multi_channel_sync import main as gen_main
+
+    return gen_main()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="generate_golden")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -74,6 +80,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("streaming_fir", help="Generate Case5 streaming FIR / packet-loss golden")
     sub.add_parser("hrv_artifact_correction", help="Generate Case6 HRV artifact-correction golden")
     sub.add_parser("ota_dfu_state_machine", help="Generate Case7 OTA/DFU state-machine golden")
+    sub.add_parser("multi_channel_sync", help="Generate Case8 multi-channel sync golden")
     args = parser.parse_args(argv)
     if args.cmd == "doctor":
         return cmd_doctor(args)
@@ -91,6 +98,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_hrv_artifact_correction(args)
     if args.cmd == "ota_dfu_state_machine":
         return cmd_ota_dfu_state_machine(args)
+    if args.cmd == "multi_channel_sync":
+        return cmd_multi_channel_sync(args)
     return 1
 
 

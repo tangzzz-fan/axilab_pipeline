@@ -118,10 +118,10 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 **What to build:** 通道序列号 + 时间戳重建；比较校正前后对齐误差。  
 **Blocked by:** T6 · Case5 流式滑窗：RingBuffer + FIR overlap + 丢包注入
 
-- [ ] 对齐口径文档：`docs/02-算法对齐口径/multi-channel-sync.md`
-- [ ] Golden 含时钟漂移 + 丢包/乱序注入
-- [ ] Swift 重建输出与 Python 真值对齐
-- [ ] 复盘文档：`docs/06-实验复盘/case-08-multi-channel-sync.md`
+- [x] 对齐口径文档：`docs/02-算法对齐口径/multi-channel-sync.md`
+- [x] Golden 含时钟漂移 + 丢包/乱序注入
+- [x] Swift 重建输出与 Python 真值对齐
+- [x] 复盘文档：`docs/06-实验复盘/case-08-multi-channel-sync.md`
 
 ## T11 · Case E：CoreML 在线漂移监控（Monitoring）
 
