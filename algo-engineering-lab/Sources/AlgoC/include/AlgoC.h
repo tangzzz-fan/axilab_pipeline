@@ -4,5 +4,6 @@
 /* SPM 以与模块同名的头文件作为 umbrella，Swift `import AlgoC` 才能看到全部 API。 */
 #include "algo_common.h"
 #include "algo_hrv.h"
+#include "algo_fir.h"
 
 #endif /* AlgoC_h */

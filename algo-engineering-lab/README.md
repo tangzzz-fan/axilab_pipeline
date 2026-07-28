@@ -50,6 +50,7 @@ swift build
 
 ```bash
 uv run python -m python.generate_golden hrv_time_domain
+uv run python -m python.generate_golden fir_ppg   # 同时刷新 C 系数头文件
 swift test --filter ParityTests
 ```
 
@@ -63,12 +64,14 @@ swift test --filter ParityTests
 | :--- | :--- | :--- | :--- | :--- |
 | 01 HRV 时域 | SDNN/RMSSD | ≤0.1 ms | ≤阈值（parity 全绿） | 通过 |
 | 01 HRV 时域 | pNN50 | ≤0.5 pp | ≤阈值 | 通过 |
+| 02 FIR PPG | 滤波输出 | ≤1e-4 | naive+vDSP 全绿 | 通过 |
 
 ### 性能数字表
 
 | 实现 | 耗时 (p50/p95) | 加速比 | 环境 |
 | :--- | :--- | :--- | :--- |
-| — | — | — | 待 T3+ |
+| FIR AlgoC naive | 见 `docs/bench-log.md` | 基准 | Debug / Apple Silicon |
+| FIR Swift vDSP_dotpr | 见 `docs/bench-log.md` | 受组窗开销影响 | 同上 |
 
 > 裸数字无效；必须带机型 / 芯片 / OS / 编译配置 / 电量与发热状态（见 `docs/05`）。
 
@@ -79,7 +82,7 @@ swift test --filter ParityTests
 | Case | 对齐口径 | 复盘 | 状态 |
 | :--- | :--- | :--- | :--- |
 | 01 HRV 时域 | [`hrv-time-domain.md`](docs/02-算法对齐口径/hrv-time-domain.md) | [`case-01`](docs/06-实验复盘/case-01-hrv-time-domain.md) | T2 已完成 |
-| 02 FIR 滤波 | 同上 | 同上 | 待 T3 |
+| 02 FIR 滤波 | [`fir-ppg-bandpass.md`](docs/02-算法对齐口径/fir-ppg-bandpass.md) | [`case-02`](docs/06-实验复盘/case-02-fir-filter.md) | T3 已完成 |
 | 03 HRV 频域 | 同上 | 同上 | 待 T4 |
 | 04 CoreML 量化 | 同上 | 同上 | 待 T5 |
 | 05 流式滑窗 | 同上 | 同上 | 待 T6 |

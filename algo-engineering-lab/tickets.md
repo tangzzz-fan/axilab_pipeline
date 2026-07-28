@@ -43,9 +43,9 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 
 **Blocked by:** T2 · Case1 HRV 时域：端到端 parity 全绿
 
-- [ ] 对齐口径含系数有效位陷阱
-- [ ] naive 与 vDSP 均过同一 golden
-- [ ] benchmark 记录含机型/芯片/iOS或macOS/配置/电量发热五项
+- [x] 对齐口径含系数有效位陷阱
+- [x] naive 与 vDSP 均过同一 golden
+- [x] benchmark 记录含机型/芯片/iOS或macOS/配置/电量发热五项
 
 ## T4 · Case3 HRV 频域：中间快照逐环对齐
 
