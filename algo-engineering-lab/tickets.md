@@ -151,7 +151,7 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 **What to build:** C naive / Accelerate / CoreML 多实现统一基准；退化门槛检测。  
 **Blocked by:** T3 · Case2 FIR 滤波：C 卷积 vs vDSP + 系数精度；T5 · Case4 CoreML 量化漂移（FP32 vs FP16）
 
-- [ ] 基准规范补充：`docs/05-性能基准规范.md` 增加能耗记录模板
-- [ ] BenchmarkTests 增加统一对比入口
-- [ ] `docs/bench-log.md` 追加可复现数字（含环境五元信息）
-- [ ] 复盘文档：`docs/06-实验复盘/case-11-perf-and-power.md`
+- [x] 基准规范补充：`docs/05-性能基准规范.md` 增加能耗记录模板
+- [x] BenchmarkTests 增加统一对比入口
+- [x] `docs/bench-log.md` 追加可复现数字（含环境五元信息）
+- [x] 复盘文档：`docs/06-实验复盘/case-11-perf-and-power.md`
