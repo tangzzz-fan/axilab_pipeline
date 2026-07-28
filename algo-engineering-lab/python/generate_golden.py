@@ -75,6 +75,12 @@ def cmd_coreml_drift_monitoring(_: argparse.Namespace) -> int:
     return gen_main()
 
 
+def cmd_sleep_staging_postprocess(_: argparse.Namespace) -> int:
+    from .generate_sleep_staging_postprocess import main as gen_main
+
+    return gen_main()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="generate_golden")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -88,6 +94,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("ota_dfu_state_machine", help="Generate Case7 OTA/DFU state-machine golden")
     sub.add_parser("multi_channel_sync", help="Generate Case8 multi-channel sync golden")
     sub.add_parser("coreml_drift_monitoring", help="Generate Case9 CoreML drift-monitoring golden")
+    sub.add_parser("sleep_staging_postprocess", help="Generate Case10 sleep staging postprocess golden")
     args = parser.parse_args(argv)
     if args.cmd == "doctor":
         return cmd_doctor(args)
@@ -109,6 +116,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_multi_channel_sync(args)
     if args.cmd == "coreml_drift_monitoring":
         return cmd_coreml_drift_monitoring(args)
+    if args.cmd == "sleep_staging_postprocess":
+        return cmd_sleep_staging_postprocess(args)
     return 1
 
 

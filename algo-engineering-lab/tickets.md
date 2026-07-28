@@ -140,10 +140,10 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 **What to build:** 输入分类概率序列，输出平滑 hypnogram 与稳定统计指标。  
 **Blocked by:** T5 · Case4 CoreML 量化漂移（FP32 vs FP16）
 
-- [ ] 对齐口径文档：`docs/02-算法对齐口径/sleep-staging-postprocess.md`
-- [ ] Golden 含抖动场景 + 约束后期望输出
-- [ ] Swift 后处理链路 parity 全绿
-- [ ] 复盘文档：`docs/06-实验复盘/case-10-sleep-staging-postprocess.md`
+- [x] 对齐口径文档：`docs/02-算法对齐口径/sleep-staging-postprocess.md`
+- [x] Golden 含抖动场景 + 约束后期望输出
+- [x] Swift 后处理链路 parity 全绿
+- [x] 复盘文档：`docs/06-实验复盘/case-10-sleep-staging-postprocess.md`
 
 ## T13 · Case F：端上性能与能耗画像（Perf + Power）
 
