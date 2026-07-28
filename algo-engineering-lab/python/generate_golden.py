@@ -45,6 +45,12 @@ def cmd_coreml_quant(_: argparse.Namespace) -> int:
     return gen_main()
 
 
+def cmd_streaming_fir(_: argparse.Namespace) -> int:
+    from .generate_streaming_fir import main as gen_main
+
+    return gen_main()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="generate_golden")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -53,6 +59,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("fir_ppg", help="Generate Case2 FIR PPG golden + C coeffs header")
     sub.add_parser("hrv_freq_domain", help="Generate Case3 HRV frequency-domain golden + snapshots")
     sub.add_parser("coreml_quant", help="Generate Case4 CoreML FP32/FP16 compare report")
+    sub.add_parser("streaming_fir", help="Generate Case5 streaming FIR / packet-loss golden")
     args = parser.parse_args(argv)
     if args.cmd == "doctor":
         return cmd_doctor(args)
@@ -64,6 +71,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_hrv_freq_domain(args)
     if args.cmd == "coreml_quant":
         return cmd_coreml_quant(args)
+    if args.cmd == "streaming_fir":
+        return cmd_streaming_fir(args)
     return 1
 
 
