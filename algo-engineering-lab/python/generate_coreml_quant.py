@@ -179,6 +179,28 @@ def run() -> dict[str, Any]:
         "disclaimer": "验证性原型，非生产健康/睡眠模型",
     }
 
+    # 固定向量回归样本：用于 Swift 侧直接加载 .mlpackage 后逐值对齐
+    verification_raw = np.array(
+        [
+            [0.10, -0.20, 0.30, 0.10, -0.10, 0.20, 0.00, 0.05],
+            [1.80, 1.10, 0.90, 0.60, 0.30, 0.25, 0.10, 0.15],
+            [2.60, 2.10, 1.60, 1.20, 0.90, 0.65, 0.50, 0.35],
+        ],
+        dtype=np.float64,
+    )
+    verification_scaled = (verification_raw - scaler.mean_) / scaler.scale_
+    v32 = _predict_batch(model_fp32, verification_scaled, key32)
+    v16 = _predict_batch(model_fp16, verification_scaled, key16)
+    report["verification_vectors"] = {
+        "raw_features": verification_raw.tolist(),
+        "scaled_features": verification_scaled.tolist(),
+        "expected_probs_fp32": v32.tolist(),
+        "expected_probs_fp16": v16.tolist(),
+        # Swift 侧对齐阈值：fp32 用更严格容差，fp16 略放宽
+        "tolerance_fp32_abs": 1e-6,
+        "tolerance_fp16_abs": 5e-4,
+    }
+
     # 直方图分箱（置信度分布偏移的可读摘要）
     bins = [round(x, 2) for x in np.linspace(0.0, 1.0, 11).tolist()]
     hist32, _ = np.histogram(conf32, bins=bins)

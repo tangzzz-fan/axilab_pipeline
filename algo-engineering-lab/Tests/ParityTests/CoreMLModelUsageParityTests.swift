@@ -31,6 +31,39 @@ final class CoreMLModelUsageParityTests: XCTestCase {
         XCTAssertTrue((0..<3).contains(top))
     }
 
+    func testSwiftOutputsMatchPythonExpectedVectors() throws {
+        let modelFP32 = try Self.locate("artifacts/coreml/activity_fp32.mlpackage")
+        let modelFP16 = try Self.locate("artifacts/coreml/activity_fp16.mlpackage")
+        let reportURL = try Self.locate("golden/coreml_quant/compare_report.json")
+        let reportData = try Data(contentsOf: reportURL)
+        guard let report = try JSONSerialization.jsonObject(with: reportData) as? [String: Any],
+              let vectors = report["verification_vectors"] as? [String: Any],
+              let scaled = vectors["scaled_features"] as? [[Double]],
+              let exp32 = vectors["expected_probs_fp32"] as? [[Double]],
+              let exp16 = vectors["expected_probs_fp16"] as? [[Double]],
+              let tol32 = vectors["tolerance_fp32_abs"] as? Double,
+              let tol16 = vectors["tolerance_fp16_abs"] as? Double else {
+            XCTFail("verification_vectors missing in compare_report.json")
+            return
+        }
+
+        XCTAssertEqual(scaled.count, exp32.count)
+        XCTAssertEqual(scaled.count, exp16.count)
+
+        for i in 0..<scaled.count {
+            let got32 = try CoreMLActivityModel.predictProbabilities(modelURL: modelFP32, features: scaled[i])
+            let got16 = try CoreMLActivityModel.predictProbabilities(modelURL: modelFP16, features: scaled[i])
+            XCTAssertEqual(got32.count, exp32[i].count, "fp32 vector \(i) length")
+            XCTAssertEqual(got16.count, exp16[i].count, "fp16 vector \(i) length")
+            for j in 0..<got32.count {
+                XCTAssertEqual(got32[j], exp32[i][j], accuracy: tol32, "fp32[\(i)][\(j)]")
+            }
+            for j in 0..<got16.count {
+                XCTAssertEqual(got16[j], exp16[i][j], accuracy: tol16, "fp16[\(i)][\(j)]")
+            }
+        }
+    }
+
     private static func locate(_ relative: String) throws -> URL {
         var url = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         for _ in 0..<8 {
