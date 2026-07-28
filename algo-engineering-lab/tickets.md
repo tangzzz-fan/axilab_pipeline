@@ -129,10 +129,10 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 **What to build:** 输入分布统计 + PSI/KL 漂移指标 + 告警阈值策略。  
 **Blocked by:** T5 · Case4 CoreML 量化漂移（FP32 vs FP16）
 
-- [ ] 对齐口径文档：`docs/02-算法对齐口径/coreml-drift-monitoring.md`
-- [ ] 报告脚本：正常/漂移场景阈值可区分
-- [ ] Parity 测试断言告警触发逻辑
-- [ ] 复盘文档：`docs/06-实验复盘/case-09-coreml-drift-monitoring.md`
+- [x] 对齐口径文档：`docs/02-算法对齐口径/coreml-drift-monitoring.md`
+- [x] 报告脚本：正常/漂移场景阈值可区分
+- [x] Parity 测试断言告警触发逻辑
+- [x] 复盘文档：`docs/06-实验复盘/case-09-coreml-drift-monitoring.md`
 
 ## T12 · Case D：睡眠分期后处理（Post-processing）
 
