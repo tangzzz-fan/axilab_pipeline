@@ -53,9 +53,37 @@
 | 数字 | `docs/bench-log.md`（追加，不覆盖） |
 | 复盘 | `docs/06-实验复盘/case-12-coreml-runtime.md` |
 
+## 5. 排查手册（出问题怎么查）
+
+### 5.1 Session 加载失败
+
+| 检查项 | 怎么做 |
+| :--- | :--- |
+| `.mlpackage` 路径 | 确认路径可达；测试用 `locate` 方法是否指向 `artifacts/coreml/` |
+| 目录结构完整 | 需含 `Manifest.json`、`Data/com.apple.CoreML/`、`weights/` |
+| 已编译 vs 未编译 | 不能对 `.mlpackage` 直接 `MLModel(contentsOf:)`；必须先 `compileModel` |
+| 磁盘空间 | `compileModel` 写临时目录；空间不足会失败 |
+
+### 5.2 bench 数字异常
+
+| 检查项 | 怎么做 |
+| :--- | :--- |
+| compile 混入了 infer | 确认 `compile_every_call` 和 `infer_cached` 分开测 |
+| 预热不够 | 前 N 次是 warm-up，只取稳定后的 p50/p95 |
+| Debug vs Release | Debug 含符号、优化低；正式对比要 Release |
+| 首次 ANE 调度延迟 | 首次 `.all` 路径可能比后续慢（ANE 初始化） |
+
+### 5.3 computeUnits 似乎不生效
+
+| 检查项 | 怎么做 |
+| :--- | :--- |
+| 模型太小 | 本 lab 195 参数 MLP，ANE/GPU 启动开销 > 计算节省 → `.all` 与 `.cpuOnly` 接近 |
+| 算子不支持 | 部分算子 ANE 不支持会 fallback CPU；用 Instruments 确认 |
+| Mac vs iPhone | Mac 的 ANE 行为与 iPhone 不同；勿直接搬数字 |
+
 ---
 
-## 5. 已知差异
+## 6. 已知差异
 
 | 差异点 | 量级 | 接受理由 | 确认人 |
 | :--- | :--- | :--- | :--- |

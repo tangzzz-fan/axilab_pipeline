@@ -41,9 +41,37 @@
 
 > `artifacts/` 可较大；`.mlpackage` 入库以便复现。若体积过大可只入库报告 + 重生脚本。
 
+## 4. 排查手册（出问题怎么查）
+
+### 4.1 top-1 一致率不达标（< 95%）
+
+| 检查项 | 怎么做 |
+| :--- | :--- |
+| 是否预处理做了两次 | 检查 App 侧是否对已 scaled 的向量又做了 normalize → 直接把问题归到 T15 |
+| scaler 参数是否同源 | 对比训练侧报告 vs App 侧实际使用的 mean/scale |
+| 模型是否被覆写 | T15 生成器会覆写 `activity_fp32.mlpackage`；若改过训练超参，需要同步重生 |
+| 是否在边界决策点集中 | 看验证集里不一致的样本——若两类概率差 < 0.01，则 FP16 翻转可接受 |
+| coremltools 版本 | 不同版本 FP16 策略可能不同；锁定 `coremltools==9.x` |
+
+### 4.2 置信度偏移异常
+
+| 检查项 | 怎么做 |
+| :--- | :--- |
+| 偏移是系统性还是个别样本 | 看 `confidence_hist` 直方图，而非只看均值 |
+| 是否超大 logits | FP16 最大值 ~65504；检查模型输出是否有 inf/NaN |
+| 是否 softmax 精度损失 | FP16 下 exp() 在大 logits 时易溢出 |
+
+### 4.3 模型加载 / 转换失败
+
+| 检查项 | 怎么做 |
+| :--- | :--- |
+| `scikit-learn` 版本 | 必须 `< 1.6`，否则 coremltools 禁用转换 API |
+| `.mlpackage` 目录完整 | 需含 `Manifest.json` + `Data/com.apple.CoreML/` |
+| 用了 `convert_to="neuralnetwork"` | 树模型会走这条路 → 没有 `compute_precision` |
+
 ---
 
-## 4. 已知差异
+## 5. 已知差异
 
 | 差异点 | 量级 | 接受理由 | 确认人 |
 | :--- | :--- | :--- | :--- |

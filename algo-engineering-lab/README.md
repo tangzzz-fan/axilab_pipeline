@@ -19,7 +19,7 @@ flowchart LR
     Swift --> Bench
 ```
 
-**CoreML 零基础：** 先读 [`docs/09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md)（ML 最小必要 → Python 生成 → 运行时 → 预处理/量化）。  
+**CoreML 零基础：** 先读 [`docs/09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md)（含 ML 最小必要 → Python 生成 → 运行时 → 预处理/量化 → 模型格式 → Swift 集成 → 性能分析 → 踩坑大全，共 9 篇）。  
 **T1–T16 通俗总览（含怎么跟别人讲）：** [`docs/10-初学者导读-T1到T16.md`](docs/10-初学者导读-T1到T16.md)。
 
 ---
@@ -155,7 +155,8 @@ swift test --filter ParityTests
 | 12 CoreML 运行时工程化 | [`coreml-runtime-engineering.md`](docs/02-算法对齐口径/coreml-runtime-engineering.md) | [`case-12`](docs/06-实验复盘/case-12-coreml-runtime.md) | 完成 |
 | 13 CoreML 预处理入模 | [`coreml-preprocess-inmodel.md`](docs/02-算法对齐口径/coreml-preprocess-inmodel.md) | [`case-13`](docs/06-实验复盘/case-13-coreml-preprocess-inmodel.md) | 完成 |
 | 14 CoreML 流式滑窗 | [`coreml-streaming.md`](docs/02-算法对齐口径/coreml-streaming.md) | [`case-14`](docs/06-实验复盘/case-14-coreml-streaming.md) | 完成 |
-| — CoreML 入门 | [`09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md) | — | 生效 |
+| — CoreML 入门（01–08） | [`09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md) | — | 生效 |
+| — CoreML 代码示例 | [`explore_mlpackage_structure.py`](python/explore_mlpackage_structure.py) · [`CoreMLIntegrationPatterns.swift`](Sources/AlgoSwift/CoreMLIntegrationPatterns.swift) | — | 生效 |
 | — T1–T16 初学者导读 | [`10-初学者导读-T1到T16.md`](docs/10-初学者导读-T1到T16.md) | — | 生效 |
 
 实施任务清单：[`tickets.md`](./tickets.md)  
