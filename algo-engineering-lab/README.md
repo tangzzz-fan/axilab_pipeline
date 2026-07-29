@@ -84,6 +84,7 @@ swift test --filter ParityTests
 | 10 睡眠后处理 | raw/smoothed/metrics | 全量对齐 | 全绿 | 通过 |
 | 11 Swift CoreML 集成 | 固定输入→概率输出 | 与 Python 向量对齐 | 全绿 | 通过 |
 | 12 CoreML 运行时 | 缓存 Session 下向量对齐 | 同 Case04 容差 | 全绿 | 通过 |
+| 13 预处理入模 | App vs 图内 scaler | ≤1e-5；负例≥0.01 | 全绿 | 通过 |
 
 ### 性能数字表
 
@@ -146,6 +147,7 @@ swift test --filter ParityTests
 | 10 睡眠分期后处理 | [`sleep-staging-postprocess.md`](docs/02-算法对齐口径/sleep-staging-postprocess.md) | [`case-10`](docs/06-实验复盘/case-10-sleep-staging-postprocess.md) | 完成 |
 | 11 统一性能与能耗画像 | [`05-性能基准规范.md`](docs/05-性能基准规范.md) | [`case-11`](docs/06-实验复盘/case-11-perf-and-power.md) | 完成 |
 | 12 CoreML 运行时工程化 | [`coreml-runtime-engineering.md`](docs/02-算法对齐口径/coreml-runtime-engineering.md) | [`case-12`](docs/06-实验复盘/case-12-coreml-runtime.md) | 完成 |
+| 13 CoreML 预处理入模 | [`coreml-preprocess-inmodel.md`](docs/02-算法对齐口径/coreml-preprocess-inmodel.md) | [`case-13`](docs/06-实验复盘/case-13-coreml-preprocess-inmodel.md) | 完成 |
 | — CoreML 入门 | [`09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md) | — | 生效 |
 
 实施任务清单：[`tickets.md`](./tickets.md)  

@@ -81,6 +81,12 @@ def cmd_sleep_staging_postprocess(_: argparse.Namespace) -> int:
     return gen_main()
 
 
+def cmd_coreml_preprocess_inmodel(_: argparse.Namespace) -> int:
+    from .generate_coreml_preprocess_inmodel import main as gen_main
+
+    return gen_main()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="generate_golden")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -95,6 +101,10 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("multi_channel_sync", help="Generate Case8 multi-channel sync golden")
     sub.add_parser("coreml_drift_monitoring", help="Generate Case9 CoreML drift-monitoring golden")
     sub.add_parser("sleep_staging_postprocess", help="Generate Case10 sleep staging postprocess golden")
+    sub.add_parser(
+        "coreml_preprocess_inmodel",
+        help="Generate Case13 CoreML App-side vs in-model preprocess compare report",
+    )
     args = parser.parse_args(argv)
     if args.cmd == "doctor":
         return cmd_doctor(args)
@@ -118,6 +128,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_coreml_drift_monitoring(args)
     if args.cmd == "sleep_staging_postprocess":
         return cmd_sleep_staging_postprocess(args)
+    if args.cmd == "coreml_preprocess_inmodel":
+        return cmd_coreml_preprocess_inmodel(args)
     return 1
 
 

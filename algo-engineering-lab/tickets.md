@@ -168,15 +168,15 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 - [x] 复盘：`docs/06-实验复盘/case-12-coreml-runtime.md`
 - [x] 入门体系：`docs/09-CoreML入门/`（00–04）
 
-## T15 · 预处理入模对照（未开始）
+## T15 · 预处理入模对照
 
 **Principle（原理）：** 预处理单源可用「烘进模型」或「全在 App」实现；双路径须数值对齐，并覆盖双重 normalize 负例。  
 **What to build:** 同权两份 mlpackage（App-scaler vs in-model-scaler）+ 负例测试。  
 **Blocked by:** T14 · Case12：CoreML 运行时工程化
 
-- [ ] 对齐口径与 golden 对照向量
-- [ ] Swift / Python 双路径 parity
-- [ ] 复盘 + 入门 `04` 增补对照实验小节
+- [x] 对齐口径与 golden 对照向量
+- [x] Swift / Python 双路径 parity
+- [x] 复盘 + 入门 `04` 增补对照实验小节
 
 ## T16 · 滑窗 Actor 接 StreamingFIR（未开始）
 
