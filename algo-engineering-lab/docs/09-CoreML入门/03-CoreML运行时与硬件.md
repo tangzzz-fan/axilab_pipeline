@@ -98,4 +98,6 @@ Parity：对 `verification_vectors` 使用 **同一 Session 多次 predict**，�
 ## 5. 流式附录（T16）
 
 BLE 分片 → RingBuffer → StreamingFIR 窗 → 8 维窗特征 → StandardScaler → 缓存 Session。  
-Actor 串行 `ingest`。详见 [`../02-算法对齐口径/coreml-streaming.md`](../02-算法对齐口径/coreml-streaming.md)、[`../06-实验复盘/case-14-coreml-streaming.md`](../06-实验复盘/case-14-coreml-streaming.md)。
+Actor 串行 `ingest`。对不齐时：**先对窗特征，再对概率**（见流式口径排查手册）。
+
+详见：[`../02-算法对齐口径/coreml-streaming.md`](../02-算法对齐口径/coreml-streaming.md)、[`../06-实验复盘/case-14-coreml-streaming.md`](../06-实验复盘/case-14-coreml-streaming.md)。

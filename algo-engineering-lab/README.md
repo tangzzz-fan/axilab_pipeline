@@ -19,7 +19,8 @@ flowchart LR
     Swift --> Bench
 ```
 
-**CoreML 零基础：** 先读 [`docs/09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md)（ML 最小必要 → Python 生成 → 运行时 → 预处理/量化）。
+**CoreML 零基础：** 先读 [`docs/09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md)（ML 最小必要 → Python 生成 → 运行时 → 预处理/量化）。  
+**T1–T16 通俗总览（含怎么跟别人讲）：** [`docs/10-初学者导读-T1到T16.md`](docs/10-初学者导读-T1到T16.md)。
 
 ---
 
@@ -155,6 +156,7 @@ swift test --filter ParityTests
 | 13 CoreML 预处理入模 | [`coreml-preprocess-inmodel.md`](docs/02-算法对齐口径/coreml-preprocess-inmodel.md) | [`case-13`](docs/06-实验复盘/case-13-coreml-preprocess-inmodel.md) | 完成 |
 | 14 CoreML 流式滑窗 | [`coreml-streaming.md`](docs/02-算法对齐口径/coreml-streaming.md) | [`case-14`](docs/06-实验复盘/case-14-coreml-streaming.md) | 完成 |
 | — CoreML 入门 | [`09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md) | — | 生效 |
+| — T1–T16 初学者导读 | [`10-初学者导读-T1到T16.md`](docs/10-初学者导读-T1到T16.md) | — | 生效 |
 
 实施任务清单：[`tickets.md`](./tickets.md)  
 文档要求说明书：[`../Talk with K3/algo-engineering-lab技术文档要求说明书.md`](../Talk%20with%20K3/algo-engineering-lab技术文档要求说明书.md)
