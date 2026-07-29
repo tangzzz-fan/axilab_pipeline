@@ -12,6 +12,9 @@
 | 2026-07-28 | 2d80668 | unified_bench | FIR Swift vDSP_dotpr | 1.4430 | 1.5470 | 0.0235× vs naive | 同上；逐点组窗开销依旧主导 |
 | 2026-07-28 | 2d80668 | unified_bench | CoreML FP32 infer(8f) | 42.5091 | 46.9099 | — | 同上；含 `MLModel.compileModel` 路径开销 |
 | 2026-07-28 | 2d80668 | unified_bench | Sleep postprocess(120 ep) | 0.1850 | 0.2040 | — | 同上；规则链路 CPU 开销低 |
+| 2026-07-29 | TBD | coreml_runtime T14 | compile_every_call | 42.0520 | 43.9750 | 1.0×（对照） | Mac / Apple M2 / macOS 26.3.1 / Xcode 26.6 / Debug / 电源·常温 |
+| 2026-07-29 | TBD | coreml_runtime T14 | infer_cached `.all` | 0.0380 | 0.0479 | ~1107× vs compile | 同上；Session 缓存后纯推理 |
+| 2026-07-29 | TBD | coreml_runtime T14 | infer_cached `.cpuOnly` | 0.0380 | 0.0559 | ~1107× vs compile | 同上；本机与 `.all` 接近 |
 
 ### 环境明细
 

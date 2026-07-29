@@ -155,3 +155,35 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 - [x] BenchmarkTests 增加统一对比入口
 - [x] `docs/bench-log.md` 追加可复现数字（含环境五元信息）
 - [x] 复盘文档：`docs/06-实验复盘/case-11-perf-and-power.md`
+
+## T14 · Case12：CoreML 运行时工程化（缓存 compile + computeUnits）
+
+**Principle（原理）：** compile 与 infer 必须拆开计量；热路径只做 prediction，并用 `MLComputeUnits` 对照。  
+**What to build:** `Session` 缓存、`cpuOnly`/`all` bench、入门文档回链、case-12 复盘。  
+**Blocked by:** T5 · Case4 CoreML 量化漂移（FP32 vs FP16）
+
+- [x] 对齐口径：`docs/02-算法对齐口径/coreml-runtime-engineering.md`
+- [x] `CoreMLActivityModel.load` + `Session.predict`；parity 用缓存 Session
+- [x] Benchmark 输出 compile_every_call / infer_cached（cpu / all）；`bench-log` 追加
+- [x] 复盘：`docs/06-实验复盘/case-12-coreml-runtime.md`
+- [x] 入门体系：`docs/09-CoreML入门/`（00–04）
+
+## T15 · 预处理入模对照（未开始）
+
+**Principle（原理）：** 预处理单源可用「烘进模型」或「全在 App」实现；双路径须数值对齐，并覆盖双重 normalize 负例。  
+**What to build:** 同权两份 mlpackage（App-scaler vs in-model-scaler）+ 负例测试。  
+**Blocked by:** T14 · Case12：CoreML 运行时工程化
+
+- [ ] 对齐口径与 golden 对照向量
+- [ ] Swift / Python 双路径 parity
+- [ ] 复盘 + 入门 `04` 增补对照实验小节
+
+## T16 · 滑窗 Actor 接 StreamingFIR（未开始）
+
+**Principle（原理）：** BLE 分片 → 滤波 → 特征窗满 → CoreML 推理，与可穿戴主场叙事同构。  
+**What to build:** Actor 串行推理 + 现有 RingBuffer/StreamingFIR 触发。  
+**Blocked by:** T6 · Case5 流式滑窗；T14 · Case12：CoreML 运行时工程化
+
+- [ ] 对齐口径与端到端 golden
+- [ ] Swift 滑窗触发 + Session 复用
+- [ ] 复盘 + 入门 `03` 流式附录

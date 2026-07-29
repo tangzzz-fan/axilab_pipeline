@@ -2,6 +2,8 @@ import XCTest
 @testable import AlgoSwift
 
 #if canImport(CoreML)
+import CoreML
+
 final class CoreMLModelUsageParityTests: XCTestCase {
     func testSwiftCanLoadAndRunPythonGeneratedModel() throws {
         let modelURL = try Self.locate("artifacts/coreml/activity_fp32.mlpackage")
@@ -22,7 +24,8 @@ final class CoreMLModelUsageParityTests: XCTestCase {
             return (x - m) / s
         }
 
-        let probs = try CoreMLActivityModel.predictProbabilities(modelURL: modelURL, features: scaled)
+        let session = try CoreMLActivityModel.load(modelURL: modelURL, computeUnits: .cpuOnly)
+        let probs = try session.predict(features: scaled)
         XCTAssertEqual(probs.count, 3)
         XCTAssertTrue(probs.allSatisfy { $0.isFinite })
         let sum = probs.reduce(0, +)
@@ -50,9 +53,13 @@ final class CoreMLModelUsageParityTests: XCTestCase {
         XCTAssertEqual(scaled.count, exp32.count)
         XCTAssertEqual(scaled.count, exp16.count)
 
+        // T14：同一 Session 缓存下多次 predict，仍须对齐 Python 期望
+        let session32 = try CoreMLActivityModel.load(modelURL: modelFP32, computeUnits: .cpuOnly)
+        let session16 = try CoreMLActivityModel.load(modelURL: modelFP16, computeUnits: .cpuOnly)
+
         for i in 0..<scaled.count {
-            let got32 = try CoreMLActivityModel.predictProbabilities(modelURL: modelFP32, features: scaled[i])
-            let got16 = try CoreMLActivityModel.predictProbabilities(modelURL: modelFP16, features: scaled[i])
+            let got32 = try session32.predict(features: scaled[i])
+            let got16 = try session16.predict(features: scaled[i])
             XCTAssertEqual(got32.count, exp32[i].count, "fp32 vector \(i) length")
             XCTAssertEqual(got16.count, exp16[i].count, "fp16 vector \(i) length")
             for j in 0..<got32.count {

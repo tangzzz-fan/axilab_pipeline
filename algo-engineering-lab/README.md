@@ -3,7 +3,7 @@
 > **定位：** 验证 Python 算法原型 → golden 数据集 → C 库 / Swift → iOS 侧 parity 回归的数值一致性与性能链路。  
 > **对外口径：** 面试前针对目标公司技术栈的**验证性原型**，不是生产项目。
 
-版本：0.3.0 · 日期：2026-07-28 · 作者：lab · 状态：生效
+版本：0.4.0 · 日期：2026-07-29 · 作者：lab · 状态：生效
 
 ---
 
@@ -18,6 +18,8 @@ flowchart LR
     C --> Bench["BenchmarkTests\n性能记录"]
     Swift --> Bench
 ```
+
+**CoreML 零基础：** 先读 [`docs/09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md)（ML 最小必要 → Python 生成 → 运行时 → 预处理/量化）。
 
 ---
 
@@ -81,6 +83,7 @@ swift test --filter ParityTests
 | 09 CoreML 漂移监控 | stable/shifted 告警语义 | 规则断言 | 全绿 | 通过 |
 | 10 睡眠后处理 | raw/smoothed/metrics | 全量对齐 | 全绿 | 通过 |
 | 11 Swift CoreML 集成 | 固定输入→概率输出 | 与 Python 向量对齐 | 全绿 | 通过 |
+| 12 CoreML 运行时 | 缓存 Session 下向量对齐 | 同 Case04 容差 | 全绿 | 通过 |
 
 ### 性能数字表
 
@@ -88,6 +91,8 @@ swift test --filter ParityTests
 | :--- | :--- | :--- | :--- |
 | FIR AlgoC naive | 见 [`docs/bench-log.md`](docs/bench-log.md) | 热路径基准 | Debug · Apple Silicon |
 | FIR Swift vDSP_dotpr | 见 bench-log | 逐点组窗开销大 | 同上 |
+| CoreML compile_every_call | 见 bench-log | **含** compile；勿当推理 | 同上 |
+| CoreML infer_cached | 见 bench-log | T14 纯推理 | 同上 |
 
 > 裸数字无效；必须带机型 / 芯片 / OS / 编译配置 / 电量与发热（`docs/05`）。
 
@@ -117,6 +122,7 @@ swift test --filter ParityTests
 4. CoreML 在线漂移监控✅
 5. 睡眠分期后处理✅
 6. 端上性能与能耗画像✅
+7. CoreML 入门文档 + 运行时工程化（T14）✅
 
 扩展 case 仍遵循同一交付链路：
 
@@ -139,6 +145,8 @@ swift test --filter ParityTests
 | 09 CoreML 漂移监控 | [`coreml-drift-monitoring.md`](docs/02-算法对齐口径/coreml-drift-monitoring.md) | [`case-09`](docs/06-实验复盘/case-09-coreml-drift-monitoring.md) | 完成 |
 | 10 睡眠分期后处理 | [`sleep-staging-postprocess.md`](docs/02-算法对齐口径/sleep-staging-postprocess.md) | [`case-10`](docs/06-实验复盘/case-10-sleep-staging-postprocess.md) | 完成 |
 | 11 统一性能与能耗画像 | [`05-性能基准规范.md`](docs/05-性能基准规范.md) | [`case-11`](docs/06-实验复盘/case-11-perf-and-power.md) | 完成 |
+| 12 CoreML 运行时工程化 | [`coreml-runtime-engineering.md`](docs/02-算法对齐口径/coreml-runtime-engineering.md) | [`case-12`](docs/06-实验复盘/case-12-coreml-runtime.md) | 完成 |
+| — CoreML 入门 | [`09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md) | — | 生效 |
 
 实施任务清单：[`tickets.md`](./tickets.md)  
 文档要求说明书：[`../Talk with K3/algo-engineering-lab技术文档要求说明书.md`](../Talk%20with%20K3/algo-engineering-lab技术文档要求说明书.md)

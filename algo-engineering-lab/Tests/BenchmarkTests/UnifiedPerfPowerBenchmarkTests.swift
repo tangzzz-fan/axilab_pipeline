@@ -1,7 +1,12 @@
 import XCTest
 @testable import AlgoSwift
 
+#if canImport(CoreML)
+import CoreML
+#endif
+
 /// T13：统一基准入口（FIR / CoreML / Sleep 后处理）。
+/// T14：CoreML 拆分 compile_every_call / 缓存后纯推理 / cpuOnly vs all。
 /// 不阻塞 CI，仅输出可复现数字并追加到 bench-log。
 final class UnifiedPerfPowerBenchmarkTests: XCTestCase {
 
@@ -12,10 +17,12 @@ final class UnifiedPerfPowerBenchmarkTests: XCTestCase {
 
         print(
             """
-            [T13 unified-bench]
+            [T13/T14 unified-bench]
             fir_naive_ms p50=\(fmt(fir.naiveP50)) p95=\(fmt(fir.naiveP95))
             fir_vdsp_ms  p50=\(fmt(fir.vdspP50)) p95=\(fmt(fir.vdspP95)) speedup=\(fmt(fir.speedup))x
-            coreml_fp32_infer_ms p50=\(fmt(coreml.p50)) p95=\(fmt(coreml.p95))
+            coreml_compile_every_call_ms p50=\(fmt(coreml.compileEvery.p50)) p95=\(fmt(coreml.compileEvery.p95))
+            coreml_infer_cached_all_ms   p50=\(fmt(coreml.inferAll.p50)) p95=\(fmt(coreml.inferAll.p95))
+            coreml_infer_cached_cpu_ms   p50=\(fmt(coreml.inferCPU.p50)) p95=\(fmt(coreml.inferCPU.p95))
             sleep_postprocess_ms p50=\(fmt(sleep.p50)) p95=\(fmt(sleep.p95))
             """
         )
@@ -48,20 +55,54 @@ final class UnifiedPerfPowerBenchmarkTests: XCTestCase {
         return (n50, percentile(naive, 0.95), v50, percentile(vdsp, 0.95), n50 / max(v50, 1e-9))
     }
 
-    private func benchmarkCoreML() throws -> (p50: Double, p95: Double) {
+    private struct CoreMLBench {
+        let compileEvery: (p50: Double, p95: Double)
+        let inferAll: (p50: Double, p95: Double)
+        let inferCPU: (p50: Double, p95: Double)
+    }
+
+    private func benchmarkCoreML() throws -> CoreMLBench {
         #if canImport(CoreML)
         let modelURL = try locate("artifacts/coreml/activity_fp32.mlpackage")
         let x: [Double] = [0.2, -0.1, 0.3, 0.1, 0.0, 0.2, -0.05, 0.12]
-        _ = try CoreMLActivityModel.predictProbabilities(modelURL: modelURL, features: x)
-        var samples: [Double] = []
-        for _ in 0..<30 {
+        let rounds = 30
+
+        // 对照：旧路径每次 compile + load + predict
+        _ = try CoreMLActivityModel.predictProbabilities(modelURL: modelURL, features: x, computeUnits: .all)
+        var compileSamples: [Double] = []
+        for _ in 0..<rounds {
             let t0 = CFAbsoluteTimeGetCurrent()
-            _ = try CoreMLActivityModel.predictProbabilities(modelURL: modelURL, features: x)
-            samples.append((CFAbsoluteTimeGetCurrent() - t0) * 1000)
+            _ = try CoreMLActivityModel.predictProbabilities(modelURL: modelURL, features: x, computeUnits: .all)
+            compileSamples.append((CFAbsoluteTimeGetCurrent() - t0) * 1000)
         }
-        return (percentile(samples, 0.50), percentile(samples, 0.95))
+
+        // 纯推理：.all
+        let sessionAll = try CoreMLActivityModel.load(modelURL: modelURL, computeUnits: .all)
+        _ = try sessionAll.predict(features: x)
+        var inferAllSamples: [Double] = []
+        for _ in 0..<rounds {
+            let t0 = CFAbsoluteTimeGetCurrent()
+            _ = try sessionAll.predict(features: x)
+            inferAllSamples.append((CFAbsoluteTimeGetCurrent() - t0) * 1000)
+        }
+
+        // 纯推理：.cpuOnly
+        let sessionCPU = try CoreMLActivityModel.load(modelURL: modelURL, computeUnits: .cpuOnly)
+        _ = try sessionCPU.predict(features: x)
+        var inferCPUSamples: [Double] = []
+        for _ in 0..<rounds {
+            let t0 = CFAbsoluteTimeGetCurrent()
+            _ = try sessionCPU.predict(features: x)
+            inferCPUSamples.append((CFAbsoluteTimeGetCurrent() - t0) * 1000)
+        }
+
+        return CoreMLBench(
+            compileEvery: (percentile(compileSamples, 0.50), percentile(compileSamples, 0.95)),
+            inferAll: (percentile(inferAllSamples, 0.50), percentile(inferAllSamples, 0.95)),
+            inferCPU: (percentile(inferCPUSamples, 0.50), percentile(inferCPUSamples, 0.95))
+        )
         #else
-        return (0, 0)
+        return CoreMLBench(compileEvery: (0, 0), inferAll: (0, 0), inferCPU: (0, 0))
         #endif
     }
 
