@@ -178,12 +178,12 @@ Work the **frontier**：blocker 全完成后即可开工。线性上优先 T0 �
 - [x] Swift / Python 双路径 parity
 - [x] 复盘 + 入门 `04` 增补对照实验小节
 
-## T16 · 滑窗 Actor 接 StreamingFIR（未开始）
+## T16 · 滑窗 Actor 接 StreamingFIR
 
 **Principle（原理）：** BLE 分片 → 滤波 → 特征窗满 → CoreML 推理，与可穿戴主场叙事同构。  
 **What to build:** Actor 串行推理 + 现有 RingBuffer/StreamingFIR 触发。  
 **Blocked by:** T6 · Case5 流式滑窗；T14 · Case12：CoreML 运行时工程化
 
-- [ ] 对齐口径与端到端 golden
-- [ ] Swift 滑窗触发 + Session 复用
-- [ ] 复盘 + 入门 `03` 流式附录
+- [x] 对齐口径与端到端 golden
+- [x] Swift 滑窗触发 + Session 复用
+- [x] 复盘 + 入门 `03` 流式附录

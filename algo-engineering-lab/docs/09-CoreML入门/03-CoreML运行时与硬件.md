@@ -92,3 +92,10 @@ Parity：对 `verification_vectors` 使用 **同一 Session 多次 predict**，�
 
 下一篇：[04-预处理单源与量化语义.md](04-预处理单源与量化语义.md)。  
 复盘数字：[`../06-实验复盘/case-12-coreml-runtime.md`](../06-实验复盘/case-12-coreml-runtime.md)。
+
+---
+
+## 5. 流式附录（T16）
+
+BLE 分片 → RingBuffer → StreamingFIR 窗 → 8 维窗特征 → StandardScaler → 缓存 Session。  
+Actor 串行 `ingest`。详见 [`../02-算法对齐口径/coreml-streaming.md`](../02-算法对齐口径/coreml-streaming.md)、[`../06-实验复盘/case-14-coreml-streaming.md`](../06-实验复盘/case-14-coreml-streaming.md)。

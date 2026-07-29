@@ -57,6 +57,8 @@ uv run python -m python.generate_golden ota_dfu_state_machine
 uv run python -m python.generate_golden multi_channel_sync
 uv run python -m python.generate_golden coreml_drift_monitoring
 uv run python -m python.generate_golden sleep_staging_postprocess
+uv run python -m python.generate_golden coreml_preprocess_inmodel
+uv run python -m python.generate_golden coreml_streaming
 swift test --filter ParityTests
 ```
 
@@ -85,6 +87,7 @@ swift test --filter ParityTests
 | 11 Swift CoreML 集成 | 固定输入→概率输出 | 与 Python 向量对齐 | 全绿 | 通过 |
 | 12 CoreML 运行时 | 缓存 Session 下向量对齐 | 同 Case04 容差 | 全绿 | 通过 |
 | 13 预处理入模 | App vs 图内 scaler | ≤1e-5；负例≥0.01 | 全绿 | 通过 |
+| 14 流式 CoreML | 窗特征+概率 | 1e-9 / 5e-4 | 全绿 | 通过 |
 
 ### 性能数字表
 
@@ -124,6 +127,8 @@ swift test --filter ParityTests
 5. 睡眠分期后处理✅
 6. 端上性能与能耗画像✅
 7. CoreML 入门文档 + 运行时工程化（T14）✅
+8. CoreML 预处理入模对照（T15）✅
+9. CoreML 流式滑窗推理（T16）✅
 
 扩展 case 仍遵循同一交付链路：
 
@@ -148,6 +153,7 @@ swift test --filter ParityTests
 | 11 统一性能与能耗画像 | [`05-性能基准规范.md`](docs/05-性能基准规范.md) | [`case-11`](docs/06-实验复盘/case-11-perf-and-power.md) | 完成 |
 | 12 CoreML 运行时工程化 | [`coreml-runtime-engineering.md`](docs/02-算法对齐口径/coreml-runtime-engineering.md) | [`case-12`](docs/06-实验复盘/case-12-coreml-runtime.md) | 完成 |
 | 13 CoreML 预处理入模 | [`coreml-preprocess-inmodel.md`](docs/02-算法对齐口径/coreml-preprocess-inmodel.md) | [`case-13`](docs/06-实验复盘/case-13-coreml-preprocess-inmodel.md) | 完成 |
+| 14 CoreML 流式滑窗 | [`coreml-streaming.md`](docs/02-算法对齐口径/coreml-streaming.md) | [`case-14`](docs/06-实验复盘/case-14-coreml-streaming.md) | 完成 |
 | — CoreML 入门 | [`09-CoreML入门/00-导读.md`](docs/09-CoreML入门/00-导读.md) | — | 生效 |
 
 实施任务清单：[`tickets.md`](./tickets.md)  

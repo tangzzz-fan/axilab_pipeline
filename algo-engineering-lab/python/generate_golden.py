@@ -87,6 +87,12 @@ def cmd_coreml_preprocess_inmodel(_: argparse.Namespace) -> int:
     return gen_main()
 
 
+def cmd_coreml_streaming(_: argparse.Namespace) -> int:
+    from .generate_coreml_streaming import main as gen_main
+
+    return gen_main()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="generate_golden")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -104,6 +110,10 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser(
         "coreml_preprocess_inmodel",
         help="Generate Case13 CoreML App-side vs in-model preprocess compare report",
+    )
+    sub.add_parser(
+        "coreml_streaming",
+        help="Generate Case14 CoreML streaming FIR window inference golden",
     )
     args = parser.parse_args(argv)
     if args.cmd == "doctor":
@@ -130,6 +140,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_sleep_staging_postprocess(args)
     if args.cmd == "coreml_preprocess_inmodel":
         return cmd_coreml_preprocess_inmodel(args)
+    if args.cmd == "coreml_streaming":
+        return cmd_coreml_streaming(args)
     return 1
 
 
